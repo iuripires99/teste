@@ -1,0 +1,231 @@
+body {
+  overflow-x: hidden;
+  max-width: 1920px;
+}
+
+.removebtstyle {
+  border: none;
+  background: transparent;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.border-none {
+  border: none !important;
+}
+
+.dashboard-content {
+  display: flex; 
+  flex-direction: column; 
+  min-height: 92vh;
+}
+
+
+.box-height {
+  height: 300px;
+}
+
+.border-product {
+  border-color: #979797;
+}
+
+.fixed-bottom-buttons {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: auto;
+  z-index: 1030;
+}
+
+/*start tabelas*/
+.table {
+  background-color: transparent;
+  width: 100%;
+  color: #212529;
+  border-collapse: collapse;
+}
+
+.w-10 {
+  width: 10% !important;
+}
+
+.table thead th:first-child {
+  width: 12%;
+  border-radius: 15px 0 0 0;
+}
+
+.table thead th:last-child {
+  border-radius: 0 15px 0 0;
+}
+
+.table thead th {
+  vertical-align: bottom;
+  padding-bottom: 10px;
+  color: white;
+  background-color: #10ccf4 !important;
+}
+
+.table tbody tr:last-child {
+  border-radius: 0 0 15px 15px !important;
+}
+/*end tabelas*/
+
+/* DatePicker ver as classes no f12 */
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker__day--selected {
+  background-color: #10ccf4 !important; 
+
+}
+
+.react-datepicker__day--keyboard-selected {
+  background-color: #10ccf4 !important; 
+  color: white;
+}
+
+/*End datepicker*/
+
+.roundbg {
+  border-radius: 15px;
+}
+
+.listimage img {
+  width: 50px;
+  height: 50px;
+}
+
+.thumb-img img {
+  width: 100px;
+  height: 100px;
+}
+
+
+.admin-box-maxw {
+  max-width: 250px;
+}
+
+.active-true {
+  background-color: #10ccf4;
+  border-radius: 5px;
+  color: white !important;
+}
+/*Remover isto prob*/
+.header-logo {
+  width: 60%;
+  max-width: 60%;
+}
+
+.notification-icon {
+  max-width: 30px;
+  max-height: 30px;
+}
+
+.username-text {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.account-text {
+  font-size: 13px;
+
+}
+
+.account-type {
+  margin-top: -5px;
+}
+
+.box-container {
+  min-height: 120px;
+}
+
+.box-image {
+  width: 50px;
+  height: 50px;
+}
+
+.ticket-print {
+  width: 75px;
+  height: 75px;
+}
+
+.hover {
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.hover:hover {
+  box-shadow: 5px 6px 6px 2px #e9ecef;
+  transform: scale(1.05);
+}
+
+.hover1 {
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.hover1:hover {
+  transform: scale(1.05);
+}
+
+.text-outdated {
+  color: #ffd56d;
+}
+
+.text-disabled {
+  color: #eb5757;
+}
+
+.text-updated {
+  color: #00b69b;
+}
+
+.Gradient {
+  background:linear-gradient(rgb(0, 204, 255),transparent);
+  background-color:blue /*this your primary color*/
+}
+
+/*
+Já cá estava, tirar isto tudo acho eu
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}*/
