@@ -1,19 +1,17 @@
-const Sequelize = require("sequelize");
-var sequelize = require("./database");
+const Sequelize = require('sequelize');
+const sequelize = require('./database');
 
-var TicketDepartment = sequelize.define('ticketDepartment', {
-    idTicketDepartment: {
-      autoIncrement: true,
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      primaryKey: true
-    },
-    departmentDescript: {
-      type: Sequelize.STRING(255),
-      allowNull: true
-    }
-  }, {
-   timestamps: false,
-   freezeTableName: true
-  });
+const TicketDepartment = sequelize.define('ticketDepartment', {
+  idTicketDepartment: {
+    type: Sequelize.INTEGER,
+    primaryKey: true
+  },
+  ticketDepartment: {
+    type: Sequelize.STRING(50),
+    allowNull: false
+  }
+}, {
+  timestamps: false
+});
+
 module.exports = TicketDepartment;

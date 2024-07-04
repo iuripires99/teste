@@ -1,46 +1,65 @@
 const express = require("express");
+const Sequelize = require('sequelize');
 const sequelize = require("../models/database");
-const { Sequelize, Op, Model, DataTypes } = require('sequelize');
-var LicenseUser = require("../models/licenseUser");
-
+const LicenseUser = require("../models/licenseUser");
 
 const controllers = {};
 
 controllers.licenseUser_list = async (req, res) => {
-  const data = await LicenseUser.findAll();
-  res.json(data);
+  try {
+    const data = await LicenseUser.findAll();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 controllers.licenseUser_create = async (req, res) => {
-  const { licenseUserEmail } = req.body;
-  const licenseUser = await LicenseUser.create({
-    licenseUserEmail
-  });
-  res.json(licenseUser);
+  const { licenseUser } = req.body;
+  try {
+    const newLicenseUser = await LicenseUser.create({ licenseUser });
+    res.json(newLicenseUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 };
 
 controllers.licenseUser_update = async (req, res) => {
-  let idReceived = req.params.id;
-  const { licenseUserEmail } = req.body;
-  const licenseUser = await LicenseUsers.update(
-    { licenseUserEmail },
-    { where: { idLicenseUser: idReceived } }
-  );
-
-  res.json({ licenseUser });
+  const idReceived = req.params.id;
+  const { licenseUser } = req.body;
+  try {
+    const updatedLicenseUser = await LicenseUser.update(
+      { licenseUser },
+      { where: { idLicenseUser: idReceived } }
+    );
+    res.json({ updatedLicenseUser });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 };
 
 controllers.licenseUser_detail = async (req, res) => {
-  let idReceived = req.params.id;
-
-  const data = await LicensUser.findOne({ where: { idLicenseUser: idReceived } });
-  res.json(data);
+  const idReceived = req.params.id;
+  try {
+    const licenseUser = await LicenseUser.findByPk(idReceived);
+    if (!licenseUser) {
+      res.status(404).json({ message: "License user not found" });
+      return;
+    }
+    res.json(licenseUser);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 controllers.licenseUser_delete = async (req, res) => {
-  let idReceived = req.params.id;
-  await LicenseUser.destroy({ where: { id: idReceived } });
-  res.json({ message: "Excluído com sucesso!" });
+  const idReceived = req.params.id;
+  try {
+    await LicenseUser.destroy({ where: { idLicenseUser: idReceived } });
+    res.json({ message: "Deleted successfully!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 module.exports = controllers;

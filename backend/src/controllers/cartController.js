@@ -1,56 +1,65 @@
 const express = require("express");
+const Sequelize = require('sequelize');
 const sequelize = require("../models/database");
-const { Sequelize, Op, Model, DataTypes } = require('sequelize');
-var Cart = require("../models/cart");
-var Buyer = require("../models/buyer");
-
+const Cart = require("../models/cart");
 
 const controllers = {};
 
 controllers.cart_list = async (req, res) => {
-  const data = await Cart.findAll({ include: [Buyer] });
-  res.json(data);
+  try {
+    const data = await Cart.findAll();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 controllers.cart_create = async (req, res) => {
-  const { cartPrice, licenseNumber, idBuyer } = req.body;
-  const cart = await Cart.create({
-    cartPrice,
-    licenseNumber,
-    idBuyer
-  });
-  res.json(cart);
+  const { IDUSER, CARTPRICE } = req.body;
+  try {
+    const newCart = await Cart.create({ IDUSER, CARTPRICE });
+    res.json(newCart);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 };
 
 controllers.cart_update = async (req, res) => {
-  let idReceived = req.params.id;
-  const { cartDate, idCart } = req.body;
-  const cart = await Cart.update(
-    { cartDate, idCart },
-    { where: { idCart: idReceived } }
-  );
-
-  res.json({ cart });
+  const idReceived = req.params.id;
+  const { IDUSER, CARTPRICE } = req.body;
+  try {
+    const updatedCart = await Cart.update(
+      { IDUSER, CARTPRICE },
+      { where: { IDCART: idReceived } }
+    );
+    res.json({ updatedCart });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 };
 
 controllers.cart_detail = async (req, res) => {
-  let idReceived = req.params.id;
-  const data = await Cart.findOne({ where: { idCart: idReceived }, include: [Buyer] });
-  res.json(data);
+  const idReceived = req.params.id;
+  try {
+    const cart = await Cart.findByPk(idReceived);
+    if (!cart) {
+      res.status(404).json({ message: "Cart not found" });
+      return;
+    }
+    res.json(cart);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 controllers.cart_delete = async (req, res) => {
-  let idReceived = req.params.id;
-  await Cart.destroy({ where: { id: idReceived } });
-  res.json({ message: "Excluído com sucesso!" });
-};
-
-controllers.cart_findByBuyerId = async (req, res) => {
-  let idReceived = req.params.id;
-
-  const data = await Cart.findOne({ where: { idBuyer: idReceived } });
-
-  res.json(data);
+  const idReceived = req.params.id;
+  try {
+    await Cart.destroy({ where: { IDCART: idReceived } });
+    res.json({ message: "Deleted successfully!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 module.exports = controllers;

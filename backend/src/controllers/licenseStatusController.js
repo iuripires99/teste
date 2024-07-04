@@ -1,46 +1,65 @@
 const express = require("express");
+const Sequelize = require('sequelize');
 const sequelize = require("../models/database");
-const { Sequelize, Op, Model, DataTypes } = require('sequelize');
-var LicenseStatus = require("../models/licenseStatus");
-
+const LicenseStatus = require("../models/licenseStatus");
 
 const controllers = {};
 
 controllers.licenseStatus_list = async (req, res) => {
-  const data = await LicenseStatus.findAll();
-  res.json(data);
+  try {
+    const data = await LicenseStatus.findAll();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 controllers.licenseStatus_create = async (req, res) => {
-  const { licenseStatusDescript } = req.body;
-  const licenseStatus = await LicenseStatus.create({
-    licenseStatusDescript
-  });
-  res.json(licenseStatus);
+  const { licenseStatus } = req.body;
+  try {
+    const newLicenseStatus = await LicenseStatus.create({ licenseStatus });
+    res.json(newLicenseStatus);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 };
 
 controllers.licenseStatus_update = async (req, res) => {
-  let idReceived = req.params.id;
-  const { licenseStatusDescript } = req.body;
-  const licenseStatus = await LicenseStatus.update(
-    { licenseStatusDescript },
-    { where: { idLicenseStatus: idReceived } }
-  );
-
-  res.json({ licenseStatus });
+  const idReceived = req.params.id;
+  const { licenseStatus } = req.body;
+  try {
+    const updatedLicenseStatus = await LicenseStatus.update(
+      { licenseStatus },
+      { where: { idLicenseStatus: idReceived } }
+    );
+    res.json({ updatedLicenseStatus });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 };
 
 controllers.licenseStatus_detail = async (req, res) => {
-  let idReceived = req.params.id;
-
-  const data = await LicenseStatus.findOne({ where: { idLicenseStatus: idReceived } });
-  res.json(data);
+  const idReceived = req.params.id;
+  try {
+    const licenseStatus = await LicenseStatus.findByPk(idReceived);
+    if (!licenseStatus) {
+      res.status(404).json({ message: "License status not found" });
+      return;
+    }
+    res.json(licenseStatus);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 controllers.licenseStatus_delete = async (req, res) => {
-  let idReceived = req.params.id;
-  await LicenseStatus.destroy({ where: { id: idReceived } });
-  res.json({ message: "Excluído com sucesso!" });
+  const idReceived = req.params.id;
+  try {
+    await LicenseStatus.destroy({ where: { idLicenseStatus: idReceived } });
+    res.json({ message: "Deleted successfully!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 module.exports = controllers;

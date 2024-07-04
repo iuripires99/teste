@@ -1,44 +1,27 @@
-var Sequelize = require("sequelize");
-var sequelize = require("./database");
-const Buyer = require("./buyer");
-const CartProduct = require("./CartProduct");
-const Product = require("./products");
+const Sequelize = require('sequelize');
+const sequelize = require('./database');
 
-var Cart = sequelize.define(
-  "cart",
-  {
+const Cart = sequelize.define('cart', {
     idCart: {
-      autoIncrement: true,
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      primaryKey: true,
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    idUser: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'user',
+            key: 'idUser'
+        }
     },
     cartPrice: {
-      type: Sequelize.DOUBLE,
-      allowNull: true,
-    },
-    licenseNumber: {
-      type: Sequelize.INTEGER,
-      allowNull: true,
-    },
-    idBuyer: {
-      type: Sequelize.INTEGER,
-      references: {
-        model: Buyer,
-        key: "idBuyer",
-      },
-    },
-  },
-  {
+        type: Sequelize.REAL,
+        allowNull: false,
+    }
+}, {
     timestamps: false,
-    freezeTableName: true,
-  }
-);
-
-Buyer.hasOne(Cart, { foreignKey: 'idBuyer' });
-Cart.belongsTo(Buyer, { foreignKey: 'idBuyer' });
-
-Cart.belongsToMany(Product, { through: CartProduct, foreignKey: 'cartIdCart' });
-Product.belongsToMany(Cart, { through: CartProduct, foreignKey: 'productIdProduct' });
+    freezeTableName: true
+});
 
 module.exports = Cart;

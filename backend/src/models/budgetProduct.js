@@ -1,34 +1,36 @@
-var Sequelize = require("sequelize");
-var sequelize = require("./database");
-const Budget = require("./budget");
-const Product = require("./products");
+const Sequelize = require('sequelize');
+const sequelize = require('./database');
 
-var BudgetProduct = sequelize.define("BudgetProduct", {
-  budgetIdBudget: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    references: {
-      model: Budget,
-      key: "idBudget",
+const Product = require('./product');
+const Budget = require('./budget');
+
+
+const BudgetProduct = sequelize.define('budgetProduct', {
+    idBudgetProduct: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        allowNull:false,
+        autoIncrement: true
     },
-  },
-    productIdProduct: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      references: {
-        model: Product,
-        key: "idProduct",
-      },
-    },
-    productQuantity: {
+    idProduct: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+            model: Product,
+            key: 'idProduct'
+        }
+    },
+    idBudget: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: Budget,
+            key: 'idBudget'
+        }
     }
-  }, {
+}, {
     timestamps: false,
     freezeTableName: true
-  });
+});
 
-
-
-  module.exports = BudgetProduct;
+module.exports = BudgetProduct;

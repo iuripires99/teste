@@ -1,25 +1,23 @@
-const Sequelize = require("sequelize");
-var sequelize = require("./database");
+const Sequelize = require('sequelize');
+const sequelize = require('./database');
 
-var Package = sequelize.define('package', {
+const Package = sequelize.define('package', {
     idPackage: {
-      autoIncrement: true,
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      primaryKey: true
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
     },
     packageName: {
-      type: Sequelize.STRING(255),
-      allowNull: true
+        type: Sequelize.STRING(50),
+        allowNull: false,
     },
     packagePrice: {
-      type: Sequelize.DOUBLE,
-      allowNull: false
+        type: Sequelize.REAL,
+        allowNull: false,
     }
-
-  }, {
+}, {
     timestamps: false,
     freezeTableName: true
-  });
+});
 
 module.exports = Package;

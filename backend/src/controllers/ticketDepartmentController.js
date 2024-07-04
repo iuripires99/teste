@@ -1,47 +1,67 @@
 const express = require("express");
+const Sequelize = require('sequelize');
 const sequelize = require("../models/database");
-const { Sequelize, Op, Model, DataTypes } = require('sequelize');
-var TicketDepartment = require("../models/ticketDepartment");
-
+const TicketDepartment = require("../models/ticketDepartment");
 
 const controllers = {};
 
-
 controllers.ticketDepartment_list = async (req, res) => {
-  const data = await TicketDepartment.findAll();
-  res.json(data);
+  try {
+    const departments = await TicketDepartment.findAll();
+    res.json(departments);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 controllers.ticketDepartment_create = async (req, res) => {
-  const { departmentDescript } = req.body;
-  const ticketDepartment = await TicketDepartment.create({
-    departmentDescript
-  });
-  res.json(ticketDepartment);
+  const { TICKETDEPARTMENT } = req.body;
+  try {
+    const newDepartment = await TicketDepartment.create({ TICKETDEPARTMENT });
+    res.json(newDepartment);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 };
 
 controllers.ticketDepartment_update = async (req, res) => {
-  let idReceived = req.params.id;
-  const { departmentDescript } = req.body;
-  const ticketDepartment = await TicketDepartment.update(
-    { departmentDescript },
-    { where: { idTicketDepartment: idReceived } }
-  );
-
-  res.json({ ticketDepartment });
+  const departmentId = req.params.id;
+  const { TICKETDEPARTMENT } = req.body;
+  try {
+    const updatedDepartment = await TicketDepartment.update(
+      { TICKETDEPARTMENT },
+      { where: { IDTICKETDEPARTMENT: departmentId } }
+    );
+    res.json({ updatedDepartment });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 };
 
 controllers.ticketDepartment_detail = async (req, res) => {
-  let idReceived = req.params.id;
-
-  const data = await TicketDepartment.findOne({ where: { idTicketDepartment: idReceived } });
-  res.json(data);
+  const departmentId = req.params.id;
+  try {
+    const department = await TicketDepartment.findOne({
+      where: { IDTICKETDEPARTMENT: departmentId }
+    });
+    if (!department) {
+      res.status(404).json({ message: "Ticket Department not found" });
+      return;
+    }
+    res.json(department);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 controllers.ticketDepartment_delete = async (req, res) => {
-  let idReceived = req.params.id;
-  await TicketDepartment.destroy({ where: { id: idReceived } });
-  res.json({ message: "Excluído com sucesso!" });
+  const departmentId = req.params.id;
+  try {
+    await TicketDepartment.destroy({ where: { IDTICKETDEPARTMENT: departmentId } });
+    res.json({ message: "Ticket Department deleted successfully!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 module.exports = controllers;

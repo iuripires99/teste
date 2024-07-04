@@ -1,45 +1,66 @@
-const express = require("express");
+const Sequelize = require('sequelize');
 const sequelize = require("../models/database");
-const { Sequelize, Op, Model, DataTypes } = require('sequelize');
-var TicketStatus = require("../models/ticketStatus");
+const TicketStatus = require("../models/ticketStatus");
 
 const controllers = {};
 
 controllers.ticketStatus_list = async (req, res) => {
-  const data = await TicketStatus.findAll();
-  res.json(data);
+  try {
+    const statuses = await TicketStatus.findAll();
+    res.json(statuses);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 controllers.ticketStatus_create = async (req, res) => {
-  const { statusDescript } = req.body;
-  const ticketStatus = await TicketStatus.create({
-    statusDescript
-  });
-  res.json(ticketStatus);
+  const { TICKETSTATUS } = req.body;
+  try {
+    const newStatus = await TicketStatus.create({ TICKETSTATUS });
+    res.json(newStatus);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 };
 
 controllers.ticketStatus_update = async (req, res) => {
-  let idReceived = req.params.id;
-  const { statusDescript } = req.body;
-  const ticketStatus = await TicketStatus.update(
-    { statusDescript },
-    { where: { idTicketStatus: idReceived } }
-  );
-
-  res.json({ ticketStatus });
+  const statusId = req.params.id;
+  const { TICKETSTATUS } = req.body;
+  try {
+    const updatedStatus = await TicketStatus.update(
+      { TICKETSTATUS },
+      { where: { IDTICKETSTATUS: statusId } }
+    );
+    res.json({ updatedStatus });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 };
 
 controllers.ticketStatus_detail = async (req, res) => {
-  let idReceived = req.params.id;
-
-  const data = await TicketStatus.findOne({ where: { idTicketStatus: idReceived } });
-  res.json(data);
+  const statusId = req.params.id;
+  try {
+    const status = await TicketStatus.findOne({
+      where: { IDTICKETSTATUS: statusId }
+    });
+    if (!status) {
+      res.status(404).json({ message: "Ticket Status not found" });
+      return;
+    }
+    res.json(status);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 controllers.ticketStatus_delete = async (req, res) => {
-  let idReceived = req.params.id;
-  await TicketStatus.destroy({ where: { id: idReceived } });
-  res.json({ message: "Excluído com sucesso!" });
+  const statusId = req.params.id;
+  try {
+    await TicketStatus.destroy({ where: { IDTICKETSTATUS: statusId } });
+    res.json({ message: "Ticket Status deleted successfully!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 module.exports = controllers;
